@@ -1,8 +1,8 @@
-from typing import Optional, List
+from typing import Optional
 from fastapi import APIRouter, UploadFile, HTTPException, Request, Form, File, Depends, status
 from pydantic import ValidationError
 from app.services.resume_parser import ResumeParser
-from app.models.schemas import ResumeAnalysisResponse,  ResumeData, RoleRecommendation, ResumeScore, PersonalityInsights
+from app.models.schemas import ResumeAnalysisResponse
 from app.services.prompt.analyze_resume_service import AnalyzeResumeService
 from slowapi import Limiter
 from slowapi.util import get_remote_address
@@ -19,7 +19,7 @@ def format_validation_error(error: ValidationError) -> dict:
     }
 
 
-@router.post("/analyze-resume", response_model=ResumeAnalysisResponse)
+@router.post("/role-suggestion", response_model=ResumeAnalysisResponse)
 @limiter.limit("5/day")  # 5 files per IP address per day
 async def analyze_resume(
     file: UploadFile,
