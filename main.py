@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 import uvicorn
 from app.main import router
+from dotenv import load_dotenv
 
+# Load environment variables from .env file
+load_dotenv()
 
 app = FastAPI(
     title="JobPsych AI",
