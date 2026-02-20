@@ -2,9 +2,51 @@
 
 An intelligent job psychology application powered by FastAPI and Google Generative AI.
 
+[![Docker Build and Push](https://github.com/muhammadrafiq/jobpsych-ai/actions/workflows/docker-build.yml/badge.svg)](https://github.com/muhammadrafiq/jobpsych-ai/actions/workflows/docker-build.yml)
+[![Docker Image Size](https://img.shields.io/docker/image-size/muhammadrafiq/jobpsych-ai/latest)](https://hub.docker.com/r/muhammadrafiq/jobpsych-ai)
+
 ## Quick Start
 
-### Running the Application
+### Prerequisites
+
+1. Copy the environment template file:
+```bash
+cp .env.example .env
+```
+
+2. Edit `.env` and add your Google API key:
+```
+GOOGLE_API_KEY=your_actual_api_key_here
+```
+
+### Running with Docker (Recommended)
+
+**Option 1: Using pre-built image from Docker Hub**
+```bash
+# Pull the latest image
+docker pull muhammadrafiq/jobpsych-ai:latest
+
+# Run the container
+docker run -p 8000:8000 --env-file .env muhammadrafiq/jobpsych-ai:latest
+```
+
+**Option 2: Using Docker Compose**
+```bash
+docker-compose up
+```
+
+**Option 3: Building locally**
+```bash
+# Build the image
+docker build -t jobpsych-ai .
+
+# Run the container
+docker run -p 8000:8000 --env-file .env jobpsych-ai
+```
+
+The application will be available at http://localhost:8000
+
+### Running Locally
 
 **Option 1: Using the run script (recommended)**
 ```bash

@@ -1,0 +1,55 @@
+# Git files
+.git
+.gitignore
+.github
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.venv
+venv/
+ENV/
+env/
+
+# Environment files (will be passed via docker-compose or runtime)
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+wheels/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Documentation
+*.md
+!README.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Scripts
+run.sh
+*.sh
+
+# Lock files (already in image)
+# Keep uv.lock as it's needed for uv sync

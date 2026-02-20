@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = FastAPI(
-    title="JobPsych AI",
-    description="An intelligent job psychology application",
+    title="Role Suggestion AI",
+    description="An intelligent job role suggestion system that analyzes resumes and provides personalized career recommendations.",
     version="0.1.0"
 )
 

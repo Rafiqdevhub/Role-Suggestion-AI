@@ -7,14 +7,8 @@ router.include_router(role_suggestion.router, prefix="/api", tags=["role-suggest
 
 @router.get("/")
 def read_home():
-    """
-    Home route that returns a welcome message.
-    
-    Returns:
-        dict: A welcome message with status
-    """
     return {
-        "message": "Welcome to JobPsych AI",
+        "message": "Welcome to Role Suggestion AI",
         "status": "active",
         "version": "0.1.0"
     }
