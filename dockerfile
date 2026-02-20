@@ -1,4 +1,3 @@
-# Use Python 3.14 as required by pyproject.toml
 FROM python:3.14-slim
 
 # Set environment variables
