@@ -2,13 +2,7 @@ import os
 from typing import Dict, List, Any, Optional
 from app.models.schemas import RoleRecommendation, ResumeScore, PersonalityInsights, CareerPathPrediction
 from app.services.prompt.base_prompt_service import BasePromptService
-
-try:
-    import google.generativeai as genai
-    GENAI_AVAILABLE = True
-except ImportError:
-    genai = None
-    GENAI_AVAILABLE = False
+from app.services.genai_adapter import GenAIAdapter, GENAI_AVAILABLE
 
 
 class AnalyzeResumeService(BasePromptService):
@@ -26,28 +20,18 @@ class AnalyzeResumeService(BasePromptService):
         self.api_key = os.getenv("GOOGLE_API_KEY")
         if not self.api_key:
             raise ValueError("GOOGLE_API_KEY environment variable is required")
-        if not GENAI_AVAILABLE or not genai:
-            raise ImportError("google-generativeai package is not available")
-        genai.configure(api_key=self.api_key)
+        if not GENAI_AVAILABLE:
+            raise ImportError("google-genai package is not available")
+        self._genai = GenAIAdapter(self.api_key)
         self._model = None
 
     @property
     def model(self):
         """Get the generative AI model instance with JSON mode enabled."""
         if self._model is None:
-            if not GENAI_AVAILABLE or not genai:
-                raise ImportError("google-generativeai package is not available")
-            try:
-                json_config = genai.types.GenerationConfig(
-                    response_mime_type="application/json"
-                )
-                self._model = genai.GenerativeModel(
-                    self.DEFAULT_MODEL,
-                    generation_config=json_config
-                )
-            except Exception:
-                # Fallback for older API versions (A fallback response is a default, pre-defined reply or action that a system takes when it doesn't understand a user's input, encounters an error, or cannot find a specific answer.)
-                self._model = genai.GenerativeModel(self.DEFAULT_MODEL)
+            if not GENAI_AVAILABLE:
+                raise ImportError("google-genai package is not available")
+            self._model = self._genai.create_model(self.DEFAULT_MODEL, json_mode=True)
         return self._model
 
     async def generate(self, resume_data: Dict[str, Any], **kwargs) -> List[RoleRecommendation]:

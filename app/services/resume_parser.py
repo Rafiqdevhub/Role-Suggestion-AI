@@ -8,12 +8,7 @@ import json
 from io import BytesIO
 import os
 
-try:
-    import google.generativeai as genai
-    GENAI_AVAILABLE = True
-except ImportError:
-    genai = None
-    GENAI_AVAILABLE = False
+from app.services.genai_adapter import GenAIAdapter, GENAI_AVAILABLE
 
 
 class ResumeParser:
@@ -22,19 +17,18 @@ class ResumeParser:
         if not self.api_key:
             raise ValueError("GOOGLE_API_KEY environment variable is required")
         
-        if not GENAI_AVAILABLE or not genai:
-            raise ImportError("google-generativeai package is not available")
-            
-        genai.configure(api_key=self.api_key)
+        if not GENAI_AVAILABLE:
+            raise ImportError("google-genai package is not available")
+        self._genai = GenAIAdapter(self.api_key)
         self._model = None
 
     @property
     def model(self):
         """Get the generative AI model instance."""
         if self._model is None:
-            if not GENAI_AVAILABLE or not genai:
-                raise ImportError("google-generativeai package is not available")
-            self._model = genai.GenerativeModel('gemini-2.5-flash')
+            if not GENAI_AVAILABLE:
+                raise ImportError("google-genai package is not available")
+            self._model = self._genai.create_model("gemini-2.5-flash")
         return self._model
 
     async def parse(self, file: UploadFile) -> Dict[str, Any]:

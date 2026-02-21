@@ -1,7 +1,7 @@
 import json
 from typing import Dict, List, Any
 from abc import ABC, abstractmethod
-import google.generativeai as genai
+from google import genai
 
 class BasePromptService(ABC):
     """

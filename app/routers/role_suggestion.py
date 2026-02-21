@@ -19,7 +19,11 @@ def format_validation_error(error: ValidationError) -> dict:
     }
 
 
-@router.post("/role-suggestion", response_model=ResumeAnalysisResponse)
+@router.post(
+    "/role-suggestion",
+    response_model=ResumeAnalysisResponse,
+    status_code=status.HTTP_200_OK,
+)
 @limiter.limit("5/day")  # 5 files per IP address per day
 async def analyze_resume(
     file: UploadFile,
@@ -57,7 +61,6 @@ async def analyze_resume(
         
         response = ResumeAnalysisResponse(
             resumeData=None,
-            questions=[],
             roleRecommendations=role_recommendations,
             resumeScore=resume_score,
             personalityInsights=personality_insights,
