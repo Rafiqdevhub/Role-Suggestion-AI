@@ -1,9 +1,7 @@
-# JobPsych AI
+# Role Suggestion AI
 
-An intelligent job psychology application powered by FastAPI and Google Generative AI.
+An intelligent resume-driven role suggestion API powered by Google Gemini. Upload a PDF/DOCX resume, optionally add a target role and job description, and get role recommendations, resume scoring, personality insights, and a career path.
 
-[![Docker Build and Push](https://github.com/muhammadrafiq/jobpsych-ai/actions/workflows/docker-build.yml/badge.svg)](https://github.com/muhammadrafiq/jobpsych-ai/actions/workflows/docker-build.yml)
-[![Docker Image Size](https://img.shields.io/docker/image-size/muhammadrafiq/jobpsych-ai/latest)](https://hub.docker.com/r/muhammadrafiq/jobpsych-ai)
 
 ## Quick Start
 
@@ -19,15 +17,20 @@ cp .env.example .env
 GOOGLE_API_KEY=your_actual_api_key_here
 ```
 
+3. Run the app (local dev)
+```bash
+uvicorn main:app --reload
+```
+
 ### Running with Docker (Recommended)
 
 **Option 1: Using pre-built image from Docker Hub**
 ```bash
 # Pull the latest image
-docker pull muhammadrafiq/jobpsych-ai:latest
+docker pull rafiq9323/role-suggestion-ai:latest
 
 # Run the container
-docker run -p 8000:8000 --env-file .env muhammadrafiq/jobpsych-ai:latest
+docker run -p 8000:8000 --env-file .env rafiq9323/role-suggestion-ai:latest
 ```
 
 **Option 2: Using Docker Compose**
@@ -38,10 +41,10 @@ docker-compose up
 **Option 3: Building locally**
 ```bash
 # Build the image
-docker build -t jobpsych-ai .
+docker build -t role-suggestion-ai .
 
 # Run the container
-docker run -p 8000:8000 --env-file .env jobpsych-ai
+docker run -p 8000:8000 --env-file .env role-suggestion-ai
 ```
 
 The application will be available at http://localhost:8000
@@ -88,15 +91,82 @@ Once the application is running, visit:
 - **ReDoc**: http://localhost:8000/redoc
 - **Home**: http://localhost:8000/
 
-## Project Structure
+## API Overview
 
+### Base URL
 ```
-.
-├── main.py              # Application entry point
-├── app/
-│   ├── main.py         # Router setup
-│   ├── models/         # Pydantic models
-│   ├── routers/        # API route handlers
-│   └── services/       # Business logic
-└── README.md
+http://localhost:8000
 ```
+
+### Routes
+
+**GET /**
+Returns a simple health/status response.
+
+**POST /api/role-suggestion**
+Upload a resume file and get role recommendations and analysis.
+
+**Rate limit:** 5 requests per IP per day.
+
+### Request (multipart/form-data)
+
+- `file` (required): PDF or DOCX resume
+- `target_role` (optional): string
+- `job_description` (optional): string
+
+Example using `curl`:
+
+```bash
+curl -X POST "http://localhost:8000/api/role-suggestion" \
+	-F "file=@/path/to/resume.pdf" \
+	-F "target_role=Frontend Developer" \
+	-F "job_description=We need React, TypeScript, and accessibility experience."
+```
+
+### Response (high level)
+
+```json
+{
+	"resumeData": null,
+	"questions": [],
+	"roleRecommendations": [
+		{
+			"roleName": "Frontend Developer",
+			"matchPercentage": 82.5,
+			"reasoning": "...",
+			"requiredSkills": ["React", "TypeScript"],
+			"missingSkills": ["Accessibility"],
+			"careerLevel": "Mid-level",
+			"industryFit": "Good"
+		}
+	],
+	"resumeScore": {
+		"overall_score": 78,
+		"technical_score": 80,
+		"experience_score": 76,
+		"education_score": 70,
+		"communication_score": 85,
+		"reasoning": "...",
+		"strengths": ["..."],
+		"weaknesses": ["..."],
+		"improvement_suggestions": ["..."]
+	},
+	"personalityInsights": {
+		"traits": {"openness": 72},
+		"work_style": "...",
+		"leadership_potential": 68,
+		"team_player_score": 74,
+		"analysis": "..."
+	},
+	"careerPath": {
+		"current_level": "Mid-level",
+		"next_roles": ["Senior Frontend Developer"],
+		"timeline": "12-18 months",
+		"required_development": ["..."]
+	},
+	"preparationPlan": {
+		"roadmap": "..."
+	}
+}
+```
+

@@ -10,5 +10,5 @@ def read_home():
     return {
         "message": "Welcome to Role Suggestion AI",
         "status": "active",
-        "version": "0.1.0"
+        "version": "1.0.0"
     }
