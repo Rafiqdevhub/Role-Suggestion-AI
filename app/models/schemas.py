@@ -19,18 +19,6 @@ class Education(BaseModel):
     year: Optional[str] = None
     details: Optional[List[str]] = None
 
-class ResumeData(BaseModel):
-    personalInfo: PersonalInfo
-    workExperience: List[Experience]
-    education: List[Education]
-    skills: List[str]
-    highlights: List[str]
-
-class Question(BaseModel):
-    type: str  # "technical" | "behavioral" | "experience"
-    question: str
-    context: str
-
 class RoleRecommendation(BaseModel):
     roleName: str
     matchPercentage: float
@@ -63,6 +51,15 @@ class CareerPathPrediction(BaseModel):
     next_roles: List[str]
     timeline: str
     required_development: List[str]
+
+
+class ResumeData(BaseModel):
+    personalInfo: Optional[PersonalInfo] = None
+    experience: Optional[List[Experience]] = []
+    education: Optional[List[Education]] = []
+    skills: Optional[List[str]] = []
+    summary: Optional[str] = None
+    certifications: Optional[List[str]] = []
 
 
 class ResumeAnalysisResponse(BaseModel):

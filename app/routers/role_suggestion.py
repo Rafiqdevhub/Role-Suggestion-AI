@@ -1,5 +1,5 @@
 from typing import Optional
-from fastapi import APIRouter, UploadFile, HTTPException, Request, Form, File, Depends, status
+from fastapi import APIRouter, UploadFile, HTTPException, Request, Form,   status
 from pydantic import ValidationError
 from app.services.resume_parser import ResumeParser
 from app.models.schemas import ResumeAnalysisResponse
@@ -60,7 +60,6 @@ async def analyze_resume(
                 preparation_plan = None
         
         response = ResumeAnalysisResponse(
-            resumeData=None,
             roleRecommendations=role_recommendations,
             resumeScore=resume_score,
             personalityInsights=personality_insights,
