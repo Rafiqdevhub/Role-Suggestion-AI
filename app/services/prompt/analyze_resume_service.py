@@ -7,7 +7,7 @@ from app.services.genai_adapter import GenAIAdapter, GENAI_AVAILABLE
 
 class AnalyzeResumeService(BasePromptService):
     """
-    Prompt service for /analyze-resume endpoint.
+    Prompt service for /role-suggestion endpoint.
     Handles:
     - General role recommendations without target role
     - Role fit analysis with target role and job description
