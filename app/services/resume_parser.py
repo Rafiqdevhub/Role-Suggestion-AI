@@ -62,7 +62,7 @@ class ResumeParser:
                     except Exception as pdf_e:
                         raise HTTPException(
                             status_code=400,
-                            detail=f"Failed to read PDF file: {str(e)}. pdfplumber error: {str(pdf_e)}"                        )
+                            detail=f"Failed to read PDF file: {str(e)}. pdfplumber error: {str(pdf_e)}")
             
             elif filename.endswith(('.doc', '.docx')):
                 try:
