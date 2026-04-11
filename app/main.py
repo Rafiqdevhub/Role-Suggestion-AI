@@ -1,6 +1,9 @@
 from fastapi import APIRouter, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 from app.routers import role_suggestion
+
+load_dotenv()
 
 router = APIRouter()
 
@@ -35,9 +38,28 @@ def create_app() -> FastAPI:
 
 app = create_app()
 
-@router.get("/")
+@app.get("/")
 def read_home(request: Request):
     app = request.app
+    route_catalog = []
+
+    for route in app.routes:
+        path = getattr(route, "path", None)
+        methods = sorted(getattr(route, "methods", []))
+        if not path or path.startswith("/openapi"):
+            continue
+
+        if path in ("/docs", "/redoc"):
+            continue
+
+        route_catalog.append(
+            {
+                "path": path,
+                "methods": methods,
+                "name": getattr(route, "name", "unknown"),
+            }
+        )
+
     return {
         "message": f"Welcome to {app.title}",
         "status": "active",
@@ -48,5 +70,13 @@ def read_home(request: Request):
             "docs_url": app.docs_url,
             "redoc_url": app.redoc_url,
             "openapi_url": app.openapi_url,
+        },
+        "api": {
+            "base_url": "/",
+            "routes": route_catalog,
+            "notes": [
+                "POST /api/role-suggestion accepts multipart/form-data with file, target_role, and job_description.",
+                "Current API limiter is set to 5 requests per IP per day for role suggestions.",
+            ],
         },
     }
