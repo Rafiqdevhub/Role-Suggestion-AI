@@ -10,7 +10,7 @@ class BasePromptService(ABC):
     Uses JSON mode for guaranteed valid JSON output from AI model.
     """
 
-    DEFAULT_MODEL = "gemini-2.5-flash"
+    DEFAULT_MODEL = "gemini-3-flash-preview"
     ADVANCED_MODEL = "gemini-2.5-pro"
 
     MATCH_RUBRIC = (
